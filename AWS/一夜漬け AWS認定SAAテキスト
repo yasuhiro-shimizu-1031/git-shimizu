@@ -1,0 +1,143 @@
+設計原理
+    スケーラビリティ
+        ステートレス
+            前後の状態に依存しないこと。対義語はステートフル
+        スティッキーセッション
+            リクエストを同一インスタンスに送る技術。LBの機能で実現
+        セッション情報の保管
+            一般的にElasticacheに情報を保管
+    自動化
+        WAF
+            攻撃元のIP遮断。CloudFlontとALBで利用可
+        LambdaとEventBridge
+            イベントをトリガーにLambdaを実行可。
+    疎結合
+        Kinesis
+            ストリーミングするサービス
+    データベース
+        リレーショナルデータベース
+            RDS
+                エンジンはAurora・MySQL・PostgreSQLなど
+                Auroraは3つのAZに2つづつデータが存在。リーダーとマスターでエンドポイントを持つ。
+        NoSQL
+            DynamoDB
+                3つのAZにレプリケーションされる
+                結果整合性モデル
+        データウェアハウス
+            Redshift
+    単一障害点の排除
+        EC2インスタンスはアクティブ冗長化が一般的
+        RDSはスタンバイ冗長化が一般的
+        NATゲートウェイ
+            プライベートサブネットからインターネットに出る場合は必須
+    コスト最適化
+        EC2のインスタンスタイプ
+        EBSのボリュームタイプ
+        S3のストレージクラス
+    キャッシュの利用
+        CloudFlont
+            オリジンの負荷軽減
+        Elasticache
+            Redis 
+            Memcached
+        DAX
+            DynamoDBに特化した高性能キャッシュ
+        S3 Transfer Acceleration   
+            CloudFlontを利用してS3へのファイル転送を高速化
+    セキュリティ
+        セキュリティグループ
+            インスタンス単位で制御。許可のみ設定可能性でステートフル。
+            デフォルト：インバウンドは全拒否。アウトバウンドは全許可。
+        NACL
+            サブネット単位で制御。許可と拒否の設定必要でステートレス。
+            デフォルト：全許可
+        暗号化
+            HTTPS通信
+                ①ALBとEC2それぞれを終端として、SSL証明書を両方で設定
+                ②NLBを使いEC2を終端として、EC2のみSSL証明書を設定
+            S3サーバサイド暗号化
+                SSE-S3
+                SSE-KMS
+                SSE-C
+        ロギング
+            システムの変更ログやコンプラ監査
+                CloudTrailログ
+            ネットワークトラフィック
+                VPCフローログ
+            全てのシステム・アプリのログ
+                CloudWatchログ
+
+セキュアなアーキテクチャ
+    ALB
+    VPC 
+    IAM
+    Redshift
+    RDS
+    Config
+    WAF
+    SecretManager
+    KMS
+    CloudTrail
+    CloudFlont 
+    S3 
+    NLB
+    Kinesis Data Firehose
+    Athena
+    FSx For Lustre
+
+弾力性に優れたアーキテクチャ
+    EBS
+    Elastic Beanstalk
+    EC2 
+    S3 
+    Glacier
+    RDS
+    DynamoDB 
+    Aurora 
+    Glue
+    Route53
+    VPC 
+    Organizations
+    SQS
+    Snowball Edge
+    TransitGateway
+    Strage Gateway 
+    CloudFlont 
+    WAF
+    System Manager 
+    AMI
+
+高性能なアーキテクチャ
+    S3 
+    Route53
+    EFS
+    SQS
+    EBS
+    DynamoDB
+    AMI
+    Aurora 
+    Redshift
+    CloudFlont
+    ALB
+    Lambda
+    FSx for Windows
+    API Gateway
+    EC2インスタンスストア
+    Global Accelerator
+    EC2
+    CloudWatch
+
+コスト最適化なアーキテクチャ
+    ECS
+    EBS
+    EC2
+    Redshift
+    Organizations
+    EBS
+    S3
+    RDS
+    
+
+その他
+    Elastic Beanstalk
+        ウェブアプリケーションやサービスのデプロイとスケーリングのためのサービス
